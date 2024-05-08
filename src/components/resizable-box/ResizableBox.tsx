@@ -15,7 +15,11 @@ const style = {
   background: "#f0f0f0",
 } as const;
 
-const ResizableBox: React.FC<ResizableProps> = ({ widthProp, heightProp, children }) => {
+const ResizableBox: React.FC<ResizableProps> = ({
+  widthProp,
+  heightProp,
+  children,
+}) => {
   const [width, setWidth] = useState<string>(widthProp);
   const [height, setHeight] = useState<string>(heightProp);
 
@@ -23,7 +27,7 @@ const ResizableBox: React.FC<ResizableProps> = ({ widthProp, heightProp, childre
     <Resizable
       style={style}
       size={{ width, height }}
-      onResizeStop={(e, direction, ref, d) => {
+      onResizeStop={(_e: any, _direction: any, _ref: any, d) => {
         setWidth(width + d.width);
         setHeight(height + d.height);
       }}
