@@ -1,11 +1,9 @@
 import { Resizable } from "re-resizable";
-
-import "./box.style.css";
 import { useState } from "react";
 
 export interface ResizableProps {
-  widthProp: number;
-  heightProp: number;
+  widthProp: string;
+  heightProp: string;
   children?: React.ReactElement;
 }
 
@@ -17,9 +15,9 @@ const style = {
   background: "#f0f0f0",
 } as const;
 
-const Box: React.FC<ResizableProps> = ({ widthProp, heightProp, children }) => {
-  const [width, setWidth] = useState<number>(widthProp);
-  const [height, setHeight] = useState<number>(heightProp);
+const ResizableBox: React.FC<ResizableProps> = ({ widthProp, heightProp, children }) => {
+  const [width, setWidth] = useState<string>(widthProp);
+  const [height, setHeight] = useState<string>(heightProp);
 
   return (
     <Resizable
@@ -35,4 +33,4 @@ const Box: React.FC<ResizableProps> = ({ widthProp, heightProp, children }) => {
   );
 };
 
-export default Box;
+export default ResizableBox;
