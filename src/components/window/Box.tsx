@@ -17,9 +17,9 @@ const style = {
   background: "#f0f0f0",
 } as const;
 
-const Box: React.FC<ResizableProps> = ({ widthProp = 200, heightProp = 300, children }) => {
-  const [width, setWidth] = useState<number>(200);
-  const [height, setHeight] = useState<number>(300);
+const Box: React.FC<ResizableProps> = ({ widthProp, heightProp, children }) => {
+  const [width, setWidth] = useState<number>(widthProp);
+  const [height, setHeight] = useState<number>(heightProp);
 
   return (
     <Resizable
