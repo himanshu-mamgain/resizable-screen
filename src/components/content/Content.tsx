@@ -3,22 +3,36 @@ import axios from "axios";
 import { CONSTANTS } from "../../constants/Constants";
 import { toast } from "react-toastify";
 
+import "./content.style.css";
+
 export interface ContentProps {
   contentType: number;
 }
 
 const Content: React.FC<ContentProps> = ({ contentType }) => {
   const [content, setContent] = useState<string>("Random content");
-  const [addFlag, setAddFlag] = useState(false);
-  const [updateFlag, setUpdateFlag] = useState(false);
+  const [flag, setFlag] = useState<boolean>(false);
+  const [showValue, setShowValue] = useState<null | boolean>(null);
+  const [count, setCount] = useState({
+    addCount: 0,
+    updateCount: 0,
+  });
 
   async function fetchData() {
-    const response = await axios.get(
-      `${CONSTANTS.BASE_URL}/data/${contentType}`
-    );
+    try {
+      const response = await axios.get(
+        `${CONSTANTS.BASE_URL}/data/${contentType}`
+      );
 
-    if (response.data) {
-      setContent(response.data.text);
+      if (response.data) {
+        setContent(response.data.text);
+        setCount({
+          addCount: response.data.add_count,
+          updateCount: response.data.update_count,
+        });
+      }
+    } catch (err: any) {
+      toast.error(err?.message);
     }
   }
 
@@ -26,54 +40,68 @@ const Content: React.FC<ContentProps> = ({ contentType }) => {
     fetchData();
   }, []);
 
-  function handleAdd() {
-    setAddFlag(true);
+  function hanldeToggle(type: string) {
+    if (type === "update") {
+      setShowValue(true);
+    }
+    setFlag(true);
   }
 
   async function handleSubmit() {
     try {
-      const response = await axios.post(
-        `${CONSTANTS.BASE_URL}/add-data/${contentType}`,
-        {
-          text: content,
-        }
-      );
+      let response: any;
 
-      console.log(response);
+      if (showValue) {
+        response = await axios.post(
+          `${CONSTANTS.BASE_URL}/update-data/${contentType}`,
+          {
+            text: content,
+          }
+        );
+      } else {
+        response = await axios.post(
+          `${CONSTANTS.BASE_URL}/add-data/${contentType}`,
+          {
+            text: content,
+          }
+        );
+      }
 
-      setAddFlag(false);
-
+      setFlag(false);
+      fetchData();
       toast.success(response.data.message);
     } catch (err: any) {
       toast.error(err?.message);
     }
   }
 
-  async function handleUpdate() {
-    setAddFlag(true);
-    setUpdateFlag(true);
-  }
-
   return (
     <div className="content-box">
-      {addFlag ? (
+      {flag ? (
         <input
           type="text"
-          value={updateFlag ? content : ""}
+          value={content}
           placeholder="Enter data here"
           onChange={(e) => setContent(e.target.value)}
         />
       ) : (
         <p className="content">{content}</p>
       )}
-      {addFlag ? (
-        <button onClick={() => handleSubmit()}>Submit</button>
+      {flag ? (
+        <div className="btn-container">
+          <button onClick={() => handleSubmit()}>Submit</button>
+          <button onClick={() => setFlag(false)}>Cancel</button>
+        </div>
       ) : (
-        <>
-          <button onClick={handleAdd}>Add</button>
-          <button onClick={handleUpdate}>Update</button>
-        </>
+        <div className="btn-container">
+          <button onClick={() => hanldeToggle("add")}>Add</button>
+          <button onClick={() => hanldeToggle("update")}>Update</button>
+        </div>
       )}
+      <div className="cnt-container">
+        <p>Add count: {count.addCount}</p>
+        <p>Update count: {count.updateCount}</p>
+      </div>
     </div>
   );
 };

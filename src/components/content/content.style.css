@@ -1,0 +1,50 @@
+.content-box {
+  width: inherit;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.content-box input {
+  padding: 3px;
+  font-size: 1rem;
+}
+
+.content-box .content {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 1.2rem;
+  border-bottom: 1px solid #000;
+}
+
+.content-box button {
+  padding: 8px;
+  background: none;
+  border: 2px solid #000;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 7px #000;
+}
+
+.content-box .btn-container {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.content-box .cnt-container {
+  font-family: "Courier New", Courier, monospace;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+}
+
+.content-box button:active {
+  background-color: #fff;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
